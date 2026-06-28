@@ -88,9 +88,9 @@ namespace CameraModifiers
 
         void OnTransformParentChanged()
         {
-            bool _previousLocalSpace = _useLocalSpace;
+            var previousLocalSpace = _useLocalSpace;
             _useLocalSpace = transform.parent != null;
-            if (_previousLocalSpace != _useLocalSpace)
+            if (previousLocalSpace != _useLocalSpace)
             {
                 Position.Value = _useLocalSpace ? transform.localPosition : transform.position;
                 Rotation.Value = _useLocalSpace ? transform.localRotation : transform.rotation;

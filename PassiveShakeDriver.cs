@@ -58,9 +58,9 @@ namespace CameraModifiers
             var t = _timer / 10f * Mathf.PI * 2f;
             var c = new Vector2(Mathf.Cos(t), Mathf.Sin(t));
 
-            var nx = Mathf.PerlinNoise(c.x + 0.1f, c.y + 0.7f);
-            var ny = Mathf.PerlinNoise(c.x + 2.3f, c.y + 3.4f);
-            var nz = Mathf.PerlinNoise(c.x + 2.2f, c.y + 2.1f);
+            var nx = ToSigned(Mathf.PerlinNoise(c.x + 0.1f, c.y + 0.7f));
+            var ny = ToSigned(Mathf.PerlinNoise(c.x + 2.3f, c.y + 3.4f));
+            var nz = ToSigned(Mathf.PerlinNoise(c.x + 2.2f, c.y + 2.1f));
 
             var direction = new Vector3(nx, ny, nz);
             if (direction.sqrMagnitude > 0.0001f)
@@ -72,11 +72,13 @@ namespace CameraModifiers
             var positionTarget = new Vector3(nx, ny, nz) * PositionStrength;
             _position = Vector3.Lerp(_position, positionTarget, deltaTime * 5f);
 
-            var fovNoise = Mathf.PerlinNoise(_timer, 42.42f);
+            var fovNoise = ToSigned(Mathf.PerlinNoise(_timer, 42.42f));
             _fov = Mathf.Lerp(_fov, fovNoise * FovStrength, deltaTime * 5f);
 
-            var orthoNoise = Mathf.PerlinNoise(_timer, 69.69f);
+            var orthoNoise = ToSigned(Mathf.PerlinNoise(_timer, 69.69f));
             _ortho = Mathf.Lerp(_ortho, orthoNoise * OrthoStrength, deltaTime * 5f);
         }
+
+        static float ToSigned(float perlin01) => perlin01 * 2f - 1f;
     }
 }
